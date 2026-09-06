@@ -28,3 +28,7 @@ Thumbs.db
 .coverage
 htmlcov/
 .pytest_cache/
+
+
+# Django collected static files
+staticfiles/
