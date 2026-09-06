@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - Student Management System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        .navbar {
+            background: #2563eb;
+            color: white;
+            padding: 16px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            font-size: 22px;
+        }
+
+        .logout-btn {
+            background: white;
+            color: #2563eb;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .header h2 {
+            font-size: 28px;
+        }
+
+        .add-btn {
+            background: #16a34a;
+            color: white;
+            text-decoration: none;
+            padding: 11px 18px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .search-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .search-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .clear-btn {
+            background: #6b7280;
+            color: white;
+            text-decoration: none;
+            padding: 11px 20px;
+            border-radius: 6px;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow-x: auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th {
+            background: #f1f5f9;
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .actions {
+            min-width: 160px;
+            white-space: nowrap;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            color: white;
+            text-decoration: none;
+
+            padding: 8px 14px;
+            border-radius: 6px;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .edit-btn {
+            background: #f59e0b;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+        }
+
+        .edit-btn:hover {
+            background: #d97706;
+        }
+
+        .delete-btn:hover {
+            background: #b91c1c;
+        }
+
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .message {
+            background: #dcfce7;
+            color: #166534;
+            padding: 12px;
+            border-radius: 6px;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                padding: 15px;
+            }
+
+            .navbar h1 {
+                font-size: 17px;
+            }
+
+            .container {
+                margin-top: 20px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .search-btn,
+            .clear-btn {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+
+        <h1>Student Management System</h1>
+
+        <form method="post" action="{% url 'logout' %}" style="display: inline;">
+            {% csrf_token %}
+
+            <button type="submit" class="logout-btn">
+                Logout
+            </button>
+        </form>
+
+    </nav>
+
+
+    <!-- Main Content -->
+    <main class="container">
+
+        <div class="header">
+
+            <h2>Students</h2>
+
+            <a href="{% url 'add_student' %}" class="add-btn">
+                + Add Student
+            </a>
+
+        </div>
+
+
+        <!-- Success Messages -->
+        {% if messages %}
+
+            <div class="messages">
+
+                {% for message in messages %}
+
+                    <div class="message">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- Search -->
+        <div class="search-box">
+
+            <form method="get" class="search-form">
+
+                <input
+                    type="text"
+                    name="search"
+                    class="search-input"
+                    placeholder="Search by student name or roll number..."
+                    value="{{ search_query }}"
+                >
+
+                <button type="submit" class="search-btn">
+                    Search
+                </button>
+
+                {% if search_query %}
+
+                    <a href="{% url 'dashboard' %}" class="clear-btn">
+                        Clear
+                    </a>
+
+                {% endif %}
+
+            </form>
+
+        </div>
+
+
+        <!-- Student Table -->
+        <div class="table-container">
+
+            {% if students %}
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Roll Number</th>
+                            <th>Student Name</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                            <th>Course</th>
+                            <th>Year</th>
+                            <th>Admission Date</th>
+                            <th>Actions</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for student in students %}
+
+                            <tr>
+
+                                <td>{{ student.roll_number }}</td>
+
+                                <td>{{ student.student_name }}</td>
+
+                                <td>{{ student.email }}</td>
+
+                                <td>{{ student.mobile_number }}</td>
+
+                                <td>{{ student.course }}</td>
+
+                                <td>{{ student.year_of_study }}</td>
+
+                                <td>{{ student.date_of_admission }}</td>
+
+                                <td class="actions">
+
+                                    <div class="action-buttons">
+
+                                        <a
+                                            href="{% url 'edit_student' student.id %}"
+                                            class="edit-btn"
+                                        >
+                                            Edit
+                                        </a>
+
+                                        <a
+                                            href="{% url 'delete_student' student.id %}"
+                                            class="delete-btn"
+                                        >
+                                            Delete
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <div class="empty-message">
+
+                    <h3>No students found</h3>
+
+                    <p>
+                        {% if search_query %}
+                            No students match "{{ search_query }}".
+                        {% else %}
+                            No students have been added yet.
+                        {% endif %}
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+</body>
+</html>
