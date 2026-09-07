@@ -729,6 +729,47 @@ Python Full Stack Developer — Fresher
 
 ---
 
+## Run with Docker
+
+Prerequisites:
+Make sure Docker Desktop is installed and running on your system.
+
+Build the Docker Image:
+docker compose build
+
+Start the Application:
+docker compose up
+
+The application will be available at:
+http://127.0.0.1:8000/
+
+Application URLs:
+Login: http://127.0.0.1:8000/login/
+Dashboard: http://127.0.0.1:8000/
+Admin Panel: http://127.0.0.1:8000/admin/
+REST API: http://127.0.0.1:8000/api/students/
+
+Run Tests Inside Docker:
+docker compose exec web python manage.py test
+
+Expected Result:
+Found 11 test(s).
+...........
+----------------------------------------------------------------------
+Ran 11 tests
+OK
+
+Stop the Application:
+Press Ctrl + C
+
+Or run:
+docker compose down
+
+Docker Files:
+Dockerfile - Docker image configuration
+docker-compose.yml - Docker Compose configuration
+.dockerignore - Files excluded from the Docker build context
+
 # 📄 Project Purpose
 
 This project was developed as part of a **Python Full Stack Developer recruitment assessment** to demonstrate practical knowledge of:
@@ -747,6 +788,7 @@ This project was developed as part of a **Python Full Stack Developer recruitmen
 - Error handling
 - Automated testing
 - Git and GitHub
+- Docker
 
 ---
 
